@@ -26,6 +26,35 @@ export function useAuth() {
     })
   }
 
+  const signInWithGithub = async () => {
+    await handleRequest(async () => {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+      })
+      if (error) throw error
+      return data
+    })
+  }
 
-  return { signUp, signIn, loading, errorMessage }
+  const resetPassword = async (email) => {
+    return await handleRequest(async () => {
+      console.log(email)
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 
+        'http://localhost:5173/reset-password'
+      })
+      if (error) throw error
+      return data
+    })
+  }
+
+  const updatePassword = async (password) => {
+    return await handleRequest(async () => {
+      const { data, error } = await supabase.auth.updateUser({ password })
+      if (error) throw error
+      return data
+    })
+  }
+
+
+  return { signUp, signIn, signInWithGithub, resetPassword, updatePassword, loading, errorMessage }
 }

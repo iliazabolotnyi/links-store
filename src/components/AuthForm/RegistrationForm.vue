@@ -17,7 +17,7 @@ const rules = z.object({
 
 const resolver = ref(zodResolver(rules))
 const {showToast}=useToastNofitications();
-const { signUp, loading, errorMessage } = useAuth()
+const { signUp, signInWithGithub, loading, errorMessage } = useAuth()
 const submitForm = async ({ valid }) => {
   if (!valid) return
 
@@ -87,7 +87,7 @@ const formData = ref({
     </div>
     <div class="grid grid-cols-2 gap-3">
       <Button type="submit" class="w-full" label="Регистрация" :loading="loading" />
-      <Button type="submit" icon="pi pi-github" class="w-full" label="GitHub" severity="contrast" />
+      <Button icon="pi pi-github" class="w-full" label="GitHub" severity="contrast" @click="signInWithGithub"/>
     </div>
   </Form>
 </template>
