@@ -4,6 +4,7 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { useUserStore } from '@/stores/useStore.js'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import { useAuth } from '@/composables/useAuth'
@@ -21,8 +22,10 @@ const rules = z.object({
   email: z.string().email({ message: 'Некорректный email' }),
   password: z.string().min(6, { message: 'Должно быть минимум 6 символов' }),
 })
+const authStore = useUserStore()
 
 const resolver = ref(zodResolver(rules))
+
 const submitForm = async ({ valid }) => {
   if (!valid) return
 
@@ -31,6 +34,8 @@ const submitForm = async ({ valid }) => {
       email: formData.value.email,
       password: formData.value.password,
     })
+    await authStore.getUser()
+    await router.replace({ name: 'main' })
   } catch {
     showToast('error', 'Ошибка входа', errorMessage.value)
   }
