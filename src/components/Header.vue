@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useStore.js'
 import { useAuth } from '@/composables/useAuth.js'
@@ -7,11 +7,14 @@ import { useToastNofitications } from '@/composables/useToastNotifications'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import Menubar from 'primevue/menubar'
+import CategoriesModal from '@/components/Modals/CategoriesModal.vue'
 
 const authStore = useUserStore()
 const { showToast } = useToastNofitications()
 const router = useRouter()
 const { signOut, errorMessage } = useAuth()
+
+const categoriesDialogVisible = ref(false)
 
 const emailFirstLetter = computed(() => {
   return authStore.user?.email ? authStore.user.email[0].toUpperCase() : ''
@@ -29,14 +32,15 @@ const signOutUser = async () => {
 </script>
 
 <template>
+  <CategoriesModal v-model="categoriesDialogVisible" />
   <div class="mb-5">
     <Menubar>
       <template #start>
         <div class="flex items-center gap-2">
-          <span class="font-bold">Links Manager</span>
+          <span class="font-bold">Links Store</span>
           <div class="flex items-center gap-2">
             <Button icon="pi pi-link" rounded />
-            <Button icon="pi pi-folder" rounded />
+            <Button icon="pi pi-folder" rounded @click="categoriesDialogVisible = true" />
           </div>
         </div>
       </template>
