@@ -24,7 +24,7 @@ const signOutUser = async () => {
   try {
     await signOut()
     authStore.resetUser()
-    await router.replace({ name: 'auth' })
+    await router.push( '/auth')
   } catch (err) {
     showToast('error', 'Нажмите выход снова', errorMessage.value)
   }

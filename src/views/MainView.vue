@@ -1,4 +1,9 @@
-<template><main></main></template>
+<template>
+  <main>
+    Links Store
+    <Button label="Submit" severity="warn" />
+  </main>
+</template>
 
 <script>
 import { onMounted } from 'vue'

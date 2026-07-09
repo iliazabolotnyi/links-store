@@ -9,6 +9,7 @@ import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import { useAuth } from '@/composables/useAuth'
 import { useToastNofitications } from '@/composables/useToastNotifications'
+import { useRouter } from 'vue-router'
 
 const { showToast } = useToastNofitications()
 const { signIn, signInWithGithub, loading, errorMessage } = useAuth()
@@ -26,6 +27,8 @@ const authStore = useUserStore()
 
 const resolver = ref(zodResolver(rules))
 
+const router = useRouter()
+
 const submitForm = async ({ valid }) => {
   if (!valid) return
 
@@ -34,8 +37,9 @@ const submitForm = async ({ valid }) => {
       email: formData.value.email,
       password: formData.value.password,
     })
+    debugger
     await authStore.getUser()
-    await router.replace({ name: 'main' })
+    await router.push('/')
   } catch {
     showToast('error', 'Ошибка входа', errorMessage.value)
   }
@@ -59,7 +63,7 @@ const submitForm = async ({ valid }) => {
         v-model="formData.email"
         class="w-full"
       />
-       <Message v-if="$form.email?.invalid" severity="error" variant="simple" size="small">
+      <Message v-if="$form.email?.invalid" severity="error" variant="simple" size="small">
         {{ $form.email.error.message }}
       </Message>
     </div>
@@ -78,7 +82,13 @@ const submitForm = async ({ valid }) => {
     <span class="cursor-pointer mb-3 block" @click="emits('resetPassword')">Забыли пароль?</span>
     <div class="grid grid-cols-2 gap-3">
       <Button type="submit" class="w-full" label="Вход" :loading="loading" />
-      <Button icon="pi pi-github" class="w-full" label="GitHub" severity="contrast" @click="signInWithGithub" />
+      <Button
+        icon="pi pi-github"
+        class="w-full"
+        label="GitHub"
+        severity="contrast"
+        @click="signInWithGithub"
+      />
     </div>
   </Form>
 </template>

@@ -9,8 +9,15 @@ export function useAuth() {
         email,
         password,
       })
-       await supabase.from('users').insert([{ id: data.user.id, firstname, email }])
       if (error) throw error
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert([{ id: data.user.id, firstname, email }]).select();
+
+      if (insertError) {
+        throw insertError
+      }
+
       return data
     })
   }
@@ -38,7 +45,7 @@ export function useAuth() {
 
   const resetPassword = async (email) => {
     return await handleRequest(async () => {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo:
         'http://localhost:5173/reset-password'
       })
       if (error) throw error
