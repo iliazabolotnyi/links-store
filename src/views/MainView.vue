@@ -1,7 +1,6 @@
 <template>
   <main>
     Links Store
-    <Button label="Submit" severity="warn" />
   </main>
 </template>
 

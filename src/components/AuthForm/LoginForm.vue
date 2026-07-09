@@ -37,7 +37,6 @@ const submitForm = async ({ valid }) => {
       email: formData.value.email,
       password: formData.value.password,
     })
-    debugger
     await authStore.getUser()
     await router.push('/')
   } catch {

@@ -9,7 +9,7 @@ import LoginForm from './LoginForm.vue'
 import RegistrationForm from './RegistrationForm.vue'
 import ResetPasswordForm from './ResetPasswordForm.vue'
 
-const activeTab = ref('signin') // signin | signup | reset
+const activeTab = ref('signin')
 </script>
 
 <template>
