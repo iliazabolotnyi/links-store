@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
-import Toast from 'primevue/toast'
 import { useToastNotifications } from '@/composables/useToastNotifications'
 import { useAuth } from '@/composables/useAuth'
 const rules = z.object({
@@ -40,7 +39,6 @@ const formData = ref({
 </script>
 
 <template>
-  <Toast />
   <Form
     v-slot="$form"
     :initial-values="formData"

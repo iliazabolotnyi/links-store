@@ -13,7 +13,6 @@ import Checkbox from 'primevue/checkbox'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import Loader from '@/components/Loader.vue'
-import Toast from 'primevue/toast'
 import { useUserStore } from '@/stores/useStore.js'
 import { useLinksStore } from '@/stores/linksStore.js'
 
@@ -182,7 +181,6 @@ watch(modelValue, async (newValue) => {
 </script>
 
 <template>
-  <Toast />
   <Dialog modal :header="textHeader" v-model:visible="modelValue" class="w-[25rem]">
     <Form
       v-slot="$form"
@@ -236,7 +234,7 @@ watch(modelValue, async (newValue) => {
         </div>
         <div class="mb-3 flex items-center gap-2">
           <Checkbox v-model="formInputs.isFavorite" inputId="isFavorite" binary />
-          <label for="isFavorite">Добавить в избранное</label>
+          <label for="isFavorite">Предпочитаемый ресурс</label>
         </div>
         <div class="flex justify-end gap-2 mt-4">
           <Button :label="textButton" :loading="isLoadingButton" type="submit" />

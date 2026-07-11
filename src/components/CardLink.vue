@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import Card from 'primevue/card'
-import Toast from 'primevue/toast'
 import { useToastNotifications } from '@/composables/useToastNotifications.js'
 import SpeedDial from 'primevue/speeddial'
 import { useLinksStore } from '@/stores/linksStore'
@@ -20,7 +19,7 @@ const { showToast } = useToastNotifications()
 
 const itemsMenuButton = ref([
   {
-    label: 'Избранное',
+    label: 'Предпочитаемый ресурс',
     icon: 'pi pi-star',
     command: async () => {
       try {
@@ -78,7 +77,6 @@ const openLink = () => {
 </script>
 
 <template>
-  <Toast />
   <CreateLinkModal v-model="createLinkDialogVisible" isEdit :id="link.id" />
   <Card class="relative" :style="{ backgroundColor: isFavoriteBgCard }">
     <template #title>

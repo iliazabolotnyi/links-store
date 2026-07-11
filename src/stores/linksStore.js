@@ -2,22 +2,53 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { supabase } from '@/supabase'
 
+const LIMIT = 9
+
 export const useLinksStore = defineStore('links', () => {
   const isLoading = ref(false)
   const links = ref([])
+  const onlyFavorites = ref(false)
+  const totalLinks = ref(0)
+  const hasMore = ref(true)
+  const offset = ref(0)
 
-  const fetchLinks = async () => {
+
+  const fetchLinks = async (resetPages = false, resetFilters = false) => {
     isLoading.value = true
-    const { data, error } = await supabase
-      .from('links')
-      .select(
-        'id, name, url, description, is_favorite, preview_image, categories (id, name), click_count',
-      )
-      .order('created_at', { ascending: false })
 
-    if (error) throw error
-    links.value = data
-    isLoading.value = false
+    if (resetPages) {
+      offset.value = 0
+      links.value = []
+      hasMore.value = true
+    }
+
+    if (resetFilters) {
+      onlyFavorites.value = false
+    }
+
+    try {
+      let query = supabase
+        .from('links')
+        .select(
+          'id, name, url, description, is_favorite, preview_image, categories (id, name), click_count',
+          { count: 'exact' },
+        )
+        .range(offset.value, offset.value + LIMIT - 1)
+
+      if (onlyFavorites.value) query = query.eq('is_favorite', true)
+      query = query.order('created_at', { ascending: false })
+
+      const { data, error, count } = await query
+      totalLinks.value = count
+      offset.value += data.length
+      if (error) throw error
+
+      links.value.push(...data)
+      hasMore.value = offset.value < totalLinks.value
+    } catch (e) {
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const changeIsFavorite = async (id) => {
@@ -56,6 +87,8 @@ export const useLinksStore = defineStore('links', () => {
   return {
     isLoading,
     links,
+    hasMore,
+    onlyFavorites,
     fetchLinks,
     changeIsFavorite,
     removeLink,

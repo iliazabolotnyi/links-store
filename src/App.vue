@@ -3,6 +3,7 @@
   import { useUserStore } from '@/stores/useStore.js'
   import { RouterView } from 'vue-router'
   import Header from '@/components/Header.vue'
+  import Toast from 'primevue/toast'
 
   const authStore = useUserStore()
   onMounted(async () => {
@@ -10,9 +11,9 @@
   })
 </script>
 
-
 <template>
-  <Header v-if="authStore.user"/>
+  <Toast />
+  <Header v-if="authStore.user" />
   <RouterView />
 </template>
 
