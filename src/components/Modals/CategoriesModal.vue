@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { supabase } from '@/supabase.js'
-import { useToastNofitications } from '@/composables/useToastNotifications.js'
+import { useToastNotifications } from '@/composables/useToastNotifications.js'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
@@ -10,7 +10,7 @@ import Skeleton from 'primevue/skeleton'
 import { Form } from '@primevue/forms'
 
 const modelValue = defineModel()
-const { showToast } = useToastNofitications()
+const { showToast } = useToastNotifications()
 
 const isLoadingModal = ref(true)
 const isLoading = ref(false)

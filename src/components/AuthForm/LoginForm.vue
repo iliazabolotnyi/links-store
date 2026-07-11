@@ -8,10 +8,10 @@ import { useUserStore } from '@/stores/useStore.js'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import { useAuth } from '@/composables/useAuth'
-import { useToastNofitications } from '@/composables/useToastNotifications'
+import { useToastNotifications } from '@/composables/useToastNotifications'
 import { useRouter } from 'vue-router'
 
-const { showToast } = useToastNofitications()
+const { showToast } = useToastNotifications()
 const { signIn, signInWithGithub, loading, errorMessage } = useAuth()
 
 const formData = ref({

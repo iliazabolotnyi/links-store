@@ -1,6 +1,6 @@
 import { useToast } from 'primevue/usetoast'
 
-export function useToastNofitications() {
+export function useToastNotifications() {
   const toast = useToast()
 
   const showToast = (type, summary, detail = 'Что-то пошло не так') => {

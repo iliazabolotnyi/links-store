@@ -7,9 +7,9 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import { useAuth } from '@/composables/useAuth'
-import { useToastNofitications } from '@/composables/useToastNotifications'
+import { useToastNotifications } from '@/composables/useToastNotifications'
 
-const { showToast } = useToastNofitications()
+const { showToast } = useToastNotifications()
 const { resetPassword, loading, errorMessage } = useAuth()
 
 const formData = ref({

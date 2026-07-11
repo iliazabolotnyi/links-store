@@ -1,12 +1,12 @@
-<template>
-  <main>
-    Links Store
-  </main>
-</template>
-
-<script>
+<script setup>
 import { onMounted } from 'vue'
-onMounted(() => {
+import { useLinksStore } from '@/stores/linksStore'
+import Loader from '@/components/Loader.vue'
+import CardLink from '@/components/CardLink.vue'
+
+const linksStore = useLinksStore()
+
+onMounted(async () => {
   if (window.location.hash) {
     const hashParams = new URLSearchParams(window.location.hash.substring(1))
     const accessToken = hashParams.get('access_token')
@@ -15,7 +15,20 @@ onMounted(() => {
       window.history.replaceState(null, null, window.location.pathname)
     }
   }
+  await linksStore.fetchLinks()
 })
 </script>
 
-<style></style>
+<template>
+  <Loader v-if="linksStore.isLoading" />
+  <div v-else>
+    <h2 v-if="!linksStore.links.length" class="font-bold text-center">
+      Ваши ссылки появятся здесь.
+    </h2>
+    <template v-else>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <CardLink v-for="link in linksStore.links" :key="link.id" :link="link" />
+      </div>
+    </template>
+  </div>
+</template>

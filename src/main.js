@@ -13,13 +13,20 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
-    theme: {
-        preset: Aura,
-        options: {
-          darkModeSelector: false
-        }
-    }
-});
+  theme: {
+    preset: Aura,
+    options: {
+      darkModeSelector: false
+    },
+  },
+  pt: {
+    toast: {
+      root: {
+        style: 'max-width: calc(100vw - 40px);',
+      },
+    },
+  },
+})
 
 app.mount('#app')
 app.use(ToastService)

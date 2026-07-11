@@ -7,7 +7,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import Toast from 'primevue/toast'
-import { useToastNofitications } from '@/composables/useToastNotifications'
+import { useToastNotifications } from '@/composables/useToastNotifications'
 import { useAuth } from '@/composables/useAuth'
 const rules = z.object({
   firstname: z.string().min(1, { message: 'Имя обязательно для заполнения' }),
@@ -16,7 +16,7 @@ const rules = z.object({
 })
 
 const resolver = ref(zodResolver(rules))
-const {showToast}=useToastNofitications();
+const { showToast } = useToastNotifications()
 const { signUp, signInWithGithub, loading, errorMessage } = useAuth()
 const submitForm = async ({ valid }) => {
   if (!valid) return
@@ -25,7 +25,7 @@ const submitForm = async ({ valid }) => {
     await signUp({
       email: formData.value.email,
       password: formData.value.password,
-      firstname: formData.value.firstname
+      firstname: formData.value.firstname,
     })
   } catch {
     showToast('error', 'Ошибка регистрации', errorMessage.value)
@@ -40,8 +40,8 @@ const formData = ref({
 </script>
 
 <template>
-    <Toast />
-    <Form
+  <Toast />
+  <Form
     v-slot="$form"
     :initial-values="formData"
     :resolver="resolver"
@@ -57,7 +57,7 @@ const formData = ref({
         v-model="formData.email"
         class="w-full"
       />
-       <Message v-if="$form.email?.invalid" severity="error" variant="simple" size="small">
+      <Message v-if="$form.email?.invalid" severity="error" variant="simple" size="small">
         {{ $form.email.error.message }}
       </Message>
     </div>
@@ -69,7 +69,7 @@ const formData = ref({
         v-model="formData.password"
         class="w-full"
       />
-        <Message v-if="$form.password?.invalid" severity="error" variant="simple" size="small">
+      <Message v-if="$form.password?.invalid" severity="error" variant="simple" size="small">
         {{ $form.password.error.message }}
       </Message>
     </div>
@@ -81,13 +81,19 @@ const formData = ref({
         v-model="formData.firstname"
         class="w-full"
       />
-       <Message v-if="$form.firstname?.invalid" severity="error" variant="simple" size="small">
+      <Message v-if="$form.firstname?.invalid" severity="error" variant="simple" size="small">
         {{ $form.firstname.error.message }}
       </Message>
     </div>
     <div class="grid grid-cols-2 gap-3">
       <Button type="submit" class="w-full" label="Регистрация" :loading="loading" />
-      <Button icon="pi pi-github" class="w-full" label="GitHub" severity="contrast" @click="signInWithGithub"/>
+      <Button
+        icon="pi pi-github"
+        class="w-full"
+        label="GitHub"
+        severity="contrast"
+        @click="signInWithGithub"
+      />
     </div>
   </Form>
 </template>
