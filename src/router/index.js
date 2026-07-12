@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/pages/Main.vue'
 import { supabase } from '@/supabase.js'
 
-let user = null
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -29,10 +27,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const { data } = await supabase.auth.getSession()
   const session = data.session
-
-  if ((to.path !== '/auth' || to.path !== '/reset-password') && !session) {
-    return next('/auth')
-  }
 
   if (to.meta.requiresAuth && !session) {
     return next('/auth')

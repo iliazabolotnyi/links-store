@@ -1,8 +1,7 @@
-# RefHub
-
-Веб-приложения для управления ссылками
+# RefKeeper
 
 ## Technologies:
+
 * Vue3
 * Pinia
 * Supabase
