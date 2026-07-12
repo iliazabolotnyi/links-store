@@ -27,13 +27,6 @@
     if (!valid) return
 
     try {
-      await signUp({
-        email: formData.value.email,
-        password: formData.value.password,
-        firstname: formData.value.firstname,
-      })
-      await authStore.getUser()
-      await router.push('/')
     } catch {
       showToast('error', 'Ошибка регистрации', errorMessage.value)
     }
