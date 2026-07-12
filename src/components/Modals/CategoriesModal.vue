@@ -89,7 +89,7 @@ watch(modelValue, async (newValue) => {
           />
         </div>
         <div class="flex justify-end gap-2 mt-4">
-          <Button type="button" label="Добавить" :loading="isLoading" @click="saveCategory" />
+          <Button :disabled="categoryName.length < 3" type="button" label="Добавить" :loading="isLoading" @click="saveCategory" />
         </div>
         <div
           class="grid mt-3 grid-cols-[1fr_32px] mb-1 gap-5"

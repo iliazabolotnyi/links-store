@@ -40,7 +40,7 @@ const signOutUser = async () => {
     <Menubar>
       <template #start>
         <div class="flex items-center gap-2">
-          <span class="font-bold">Links Store</span>
+          <span class="font-bold">RefHub</span>
           <div class="flex items-center gap-2">
             <Button icon="pi pi-link" rounded @click="createLinkDialogVisible = true" />
             <Button icon="pi pi-folder" rounded @click="categoriesDialogVisible = true" />

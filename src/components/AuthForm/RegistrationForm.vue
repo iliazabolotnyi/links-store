@@ -8,6 +8,11 @@ import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
 import { useToastNotifications } from '@/composables/useToastNotifications'
 import { useAuth } from '@/composables/useAuth'
+import { useUserStore } from '@/stores/useStore.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const rules = z.object({
   firstname: z.string().min(1, { message: 'Имя обязательно для заполнения' }),
   email: z.string().email({ message: 'Некорректный email' }),
@@ -17,6 +22,7 @@ const rules = z.object({
 const resolver = ref(zodResolver(rules))
 const { showToast } = useToastNotifications()
 const { signUp, signInWithGithub, loading, errorMessage } = useAuth()
+const authStore = useUserStore()
 const submitForm = async ({ valid }) => {
   if (!valid) return
 
@@ -26,6 +32,8 @@ const submitForm = async ({ valid }) => {
       password: formData.value.password,
       firstname: formData.value.firstname,
     })
+    await authStore.getUser()
+    await router.push('/')
   } catch {
     showToast('error', 'Ошибка регистрации', errorMessage.value)
   }
@@ -85,13 +93,6 @@ const formData = ref({
     </div>
     <div class="grid grid-cols-2 gap-3">
       <Button type="submit" class="w-full" label="Регистрация" :loading="loading" />
-      <Button
-        icon="pi pi-github"
-        class="w-full"
-        label="GitHub"
-        severity="contrast"
-        @click="signInWithGithub"
-      />
     </div>
   </Form>
 </template>

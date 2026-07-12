@@ -73,12 +73,19 @@ const getCategories = async () => {
 }
 
 const getDomain = (url) => {
-  const { hostname } = new URL(url)
-  const parts = hostname.split('.')
-  if (parts.length > 2) {
-    return parts.slice(-2).join('.')
+  let domainname
+  try {
+    const { hostname } = new URL(url)
+    const parts = hostname.split('.')
+    if (parts.length > 2) {
+      domainname = parts.slice(-2).join('.')
+    }
+    domainname = hostname
+  } catch (e) {
+    isLoadingButton.value = false
+    showToast('error', 'Ошибка', 'Не удалось добавить ссылку')
   }
-  return hostname
+  return domainname
 }
 
 const addNewLink = async () => {
@@ -122,7 +129,8 @@ const updateLink = async () => {
     const { error } = await supabase.from('links').update(payload).eq('id', props.id)
 
     if (error) throw error
-
+    modelValue.value = false
+    clear()
     showToast('success', 'Успех', 'Ссылка изменена')
   } catch {
     showToast('error', 'При изменении ссылка произошла ошибка')
@@ -137,7 +145,7 @@ const submitForm = async () => {
   } else {
     await addNewLink()
   }
-  await linksStore.fetchLinks()
+  await linksStore.fetchLinks(true, true)
 }
 
 const textButton = computed(() => {
@@ -192,52 +200,55 @@ watch(modelValue, async (newValue) => {
     >
       <Loader v-if="isLoading" />
       <template v-else>
-        <div class="mb-3">
-          <InputText
-            name="name"
-            v-model="formInputs.name"
-            class="w-full"
-            autocomplete="off"
-            placeholder="Название ссылки"
-          />
-          <Message v-if="$form.name?.invalid" severity="error" variant="simple" size="small">
-            {{ $form.name.error.message }}
-          </Message>
-        </div>
-        <div class="mb-3">
-          <InputText
-            name="url"
-            v-model="formInputs.url"
-            class="w-full"
-            autocomplete="off"
-            placeholder="Ссылка"
-          />
-          <Message v-if="$form.url?.invalid" severity="error" variant="simple" size="small">
-            {{ $form.url.error.message }}
-          </Message>
-        </div>
-        <div class="mb-3">
-          <Select
-            v-model="formInputs.category"
-            :options="listCategories"
-            optionLabel="name"
-            placeholder="Выберите категорию"
-            class="w-full"
-          />
-        </div>
-        <div class="mb-3">
-          <Textarea
-            v-model="formInputs.description"
-            class="w-full resize-none"
-            placeholder="Описание"
-          />
-        </div>
-        <div class="mb-3 flex items-center gap-2">
-          <Checkbox v-model="formInputs.isFavorite" inputId="isFavorite" binary />
-          <label for="isFavorite">Предпочитаемый ресурс</label>
-        </div>
-        <div class="flex justify-end gap-2 mt-4">
-          <Button :label="textButton" :loading="isLoadingButton" type="submit" />
+        <div class="font-bold" v-if="!listCategories.length">Добавьте хотя бы одну категорию</div>
+        <div v-else>
+          <div class="mb-3">
+            <InputText
+              name="name"
+              v-model="formInputs.name"
+              class="w-full"
+              autocomplete="off"
+              placeholder="Название ссылки"
+            />
+            <Message v-if="$form.name?.invalid" severity="error" variant="simple" size="small">
+              {{ $form.name.error.message }}
+            </Message>
+          </div>
+          <div class="mb-3">
+            <InputText
+              name="url"
+              v-model="formInputs.url"
+              class="w-full"
+              autocomplete="off"
+              placeholder="Ссылка"
+            />
+            <Message v-if="$form.url?.invalid" severity="error" variant="simple" size="small">
+              {{ $form.url.error.message }}
+            </Message>
+          </div>
+          <div class="mb-3">
+            <Select
+              v-model="formInputs.category"
+              :options="listCategories"
+              optionLabel="name"
+              placeholder="Выберите категорию"
+              class="w-full"
+            />
+          </div>
+          <div class="mb-3">
+            <Textarea
+              v-model="formInputs.description"
+              class="w-full resize-none"
+              placeholder="Описание"
+            />
+          </div>
+          <div class="mb-3 flex items-center gap-2">
+            <Checkbox v-model="formInputs.isFavorite" inputId="isFavorite" binary />
+            <label for="isFavorite">Предпочитаемый ресурс</label>
+          </div>
+          <div class="flex justify-end gap-2 mt-4">
+            <Button :label="textButton" :loading="isLoadingButton" type="submit" />
+          </div>
         </div>
       </template>
     </Form>
