@@ -7,8 +7,8 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { useUserStore } from '@/stores/useStore.js'
 import { Form } from '@primevue/forms'
 import Message from 'primevue/message'
-import { useAuth } from '@/composables/useAuth'
-import { useToastNotifications } from '@/composables/useToastNotifications'
+import { useAuth } from '@/composables/useAuth.js'
+import { useToastNotifications } from '@/composables/useToastNotifications.js'
 import { useRouter } from 'vue-router'
 
 const { showToast } = useToastNotifications()

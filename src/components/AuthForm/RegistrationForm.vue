@@ -1,49 +1,49 @@
 <script setup>
-import { ref } from 'vue'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import { z } from 'zod'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
-import { Form } from '@primevue/forms'
-import Message from 'primevue/message'
-import { useToastNotifications } from '@/composables/useToastNotifications'
-import { useAuth } from '@/composables/useAuth'
-import { useUserStore } from '@/stores/useStore.js'
-import { useRouter } from 'vue-router'
+  import { ref } from 'vue'
+  import Button from 'primevue/button'
+  import InputText from 'primevue/inputtext'
+  import { z } from 'zod'
+  import { zodResolver } from '@primevue/forms/resolvers/zod'
+  import { Form } from '@primevue/forms'
+  import Message from 'primevue/message'
+  import { useToastNotifications } from '@/composables/useToastNotifications.js'
+  import { useAuth } from '@/composables/useAuth.js'
+  import { useUserStore } from '@/stores/useStore.js'
+  import { useRouter } from 'vue-router'
 
-const router = useRouter()
+  const router = useRouter()
 
-const rules = z.object({
-  firstname: z.string().min(1, { message: 'Имя обязательно для заполнения' }),
-  email: z.string().email({ message: 'Некорректный email' }),
-  password: z.string().min(6, { message: 'Должно быть минимум 6 символов' }),
-})
+  const rules = z.object({
+    firstname: z.string().min(1, { message: 'Имя обязательно для заполнения' }),
+    email: z.string().email({ message: 'Некорректный email' }),
+    password: z.string().min(6, { message: 'Должно быть минимум 6 символов' }),
+  })
 
-const resolver = ref(zodResolver(rules))
-const { showToast } = useToastNotifications()
-const { signUp, signInWithGithub, loading, errorMessage } = useAuth()
-const authStore = useUserStore()
-const submitForm = async ({ valid }) => {
-  if (!valid) return
+  const resolver = ref(zodResolver(rules))
+  const { showToast } = useToastNotifications()
+  const { signUp, signInWithGithub, loading, errorMessage } = useAuth()
+  const authStore = useUserStore()
+  const submitForm = async ({ valid }) => {
+    if (!valid) return
 
-  try {
-    await signUp({
-      email: formData.value.email,
-      password: formData.value.password,
-      firstname: formData.value.firstname,
-    })
-    await authStore.getUser()
-    await router.push('/')
-  } catch {
-    showToast('error', 'Ошибка регистрации', errorMessage.value)
+    try {
+      await signUp({
+        email: formData.value.email,
+        password: formData.value.password,
+        firstname: formData.value.firstname,
+      })
+      await authStore.getUser()
+      await router.push('/')
+    } catch {
+      showToast('error', 'Ошибка регистрации', errorMessage.value)
+    }
   }
-}
 
-const formData = ref({
-  email: '',
-  password: '',
-  firstname: '',
-})
+  const formData = ref({
+    email: '',
+    password: '',
+    firstname: '',
+  })
 </script>
 
 <template>
