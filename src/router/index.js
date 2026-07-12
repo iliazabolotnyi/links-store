@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
   const { data } = await supabase.auth.getSession()
   const session = data.session
 
-  if (to.path !== '/auth' && !session) {
+  if ((to.path !== '/auth' || to.path !== '/reset-password') && !session) {
     return next('/auth')
   }
 
