@@ -45,8 +45,8 @@ export function useAuth() {
 
   const resetPassword = async (email) => {
     return await handleRequest(async () => {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {redirectTo:
-        'http://localhost:5173/reset-password'
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://refkeeper.netlify.app/reset-password',
       })
       if (error) throw error
       return data
